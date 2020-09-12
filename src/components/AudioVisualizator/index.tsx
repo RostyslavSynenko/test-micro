@@ -35,7 +35,7 @@ const AudioVisualizator = ({ handleError }: Props) => {
       }
     };
 
-    const handleAudioProcess = () => {
+    const handleAudioProcess = (): void => {
       const array = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(array);
       const length = array.length;
