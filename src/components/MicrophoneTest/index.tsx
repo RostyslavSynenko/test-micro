@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AudioVisualizator from '../AudioVisualizator';
+import SoundMeter from '../SoundMeter';
 import Button from '@material-ui/core/Button';
 import KeyboardVoiceIcon from '@material-ui/icons/KeyboardVoice';
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,7 +48,7 @@ const MicrophoneTest = () => {
       >
         {buttonMessage}
         {checkMicro && !permissionError && (
-          <AudioVisualizator handleError={handleError} />
+          <SoundMeter handleError={handleError} />
         )}
       </Button>
     </div>
