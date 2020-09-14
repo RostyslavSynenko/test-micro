@@ -1,22 +1,37 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
-import MicrophoneTest from '../';
+import { render, screen } from '@testing-library/react';
+import MicrophoneTest from '..';
 
 describe('MicrophoneTest component tests', () => {
-  test('should contain button with "Test micro" text', () => {
-    render(<MicrophoneTest />);
+  const handlePermissionError = jest.fn();
+  const handleSuccess = jest.fn();
+  const handleError = jest.fn();
 
-    expect(screen.getByText('Test micro')).toBeInTheDocument();
+  test('should contain paragraph "Please say, I save lives"', () => {
+    render(
+      <MicrophoneTest
+        handlePermissionError={handlePermissionError}
+        handleSuccess={handleSuccess}
+        handleError={handleError}
+      />
+    );
+
+    expect(screen.getByText('Please say, "I save lives"')).toBeInTheDocument();
   });
 
-  test('should contain button with "No permission" after click without permission', () => {
-    render(<MicrophoneTest />);
+  test('should contain 2 buttons', () => {
+    render(
+      <MicrophoneTest
+        handlePermissionError={handlePermissionError}
+        handleSuccess={handleSuccess}
+        handleError={handleError}
+      />
+    );
 
-    fireEvent.click(screen.getByText('Test micro'));
+    screen.debug();
 
-    expect(screen.queryByText('Test micro')).toBeNull();
-
-    expect(screen.getByText('No permission')).toBeInTheDocument();
+    expect(screen.getByText("It didn't work")).toBeInTheDocument();
+    expect(screen.getByText('It worked!')).toBeInTheDocument();
   });
 });

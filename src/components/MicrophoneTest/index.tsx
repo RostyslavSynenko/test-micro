@@ -1,56 +1,74 @@
-import React, { useState } from 'react';
-import SoundMeter from '../SoundMeter';
-import Button from '@material-ui/core/Button';
-import KeyboardVoiceIcon from '@material-ui/icons/KeyboardVoice';
+import React from 'react';
+import AudioMeter from '../AudioMeter';
+import { Button, Typography } from '@material-ui/core';
+import MicIcon from '@material-ui/icons/Mic';
 import { makeStyles } from '@material-ui/core/styles';
 
+type Props = {
+  handlePermissionError: (err: DOMException) => void;
+  handleSuccess: () => void;
+  handleError: () => void;
+};
+
 const useStyles = makeStyles(theme => ({
-  button: {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconContainer: {
     position: 'relative',
+    margin: `${theme.spacing(3)}px 0`
+  },
+  micIcon: {
+    color: 'lightgrey',
+    fontSize: 60
+  },
+  buttonsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2)
+  },
+  button: {
     margin: theme.spacing(1)
   }
 }));
 
-const MicrophoneTest = () => {
+const MicrophoneTest = ({
+  handlePermissionError,
+  handleSuccess,
+  handleError
+}: Props) => {
   const classes = useStyles();
-  const [checkMicro, setCheckMicro] = useState(false);
-  const [permissionError, setPermissionError] = useState<DOMException | null>(
-    null
-  );
-
-  let buttonMessage: string;
-
-  if (permissionError) {
-    buttonMessage = 'No permission';
-  } else {
-    buttonMessage = !checkMicro ? 'Test micro' : 'Stop test';
-  }
-
-  const toggleTest = (): void => {
-    setCheckMicro(prevState => !prevState);
-  };
-
-  const handleError = (err: DOMException): void => {
-    setPermissionError(err);
-    setCheckMicro(false);
-  };
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        color="default"
-        size="small"
-        className={classes.button}
-        endIcon={<KeyboardVoiceIcon />}
-        disabled={Boolean(permissionError)}
-        onClick={toggleTest}
-      >
-        {buttonMessage}
-        {checkMicro && !permissionError && (
-          <SoundMeter handleError={handleError} />
-        )}
-      </Button>
+    <div className={classes.container}>
+      <div className={classes.iconContainer}>
+        <MicIcon className={classes.micIcon} />
+        <AudioMeter handleError={handlePermissionError} />
+      </div>
+      <Typography variant="h5" component="p">
+        Please say, "I save lives"
+      </Typography>
+      <div className={classes.buttonsContainer}>
+        <Button
+          variant="contained"
+          color="default"
+          className={classes.button}
+          onClick={handleError}
+        >
+          It didn't work
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={handleSuccess}
+        >
+          It worked!
+        </Button>
+      </div>
     </div>
   );
 };
